@@ -11,7 +11,8 @@ class Sistema {
     
     def registrar(String nombre, String apellido, Date nacimiento, String usuario, String contraseña){
    if(!usuarioExiste(usuario)){
-   	var Usuario nuevo = new Usuario(nombre, apellido, nacimiento, usuario, contraseña)	
+   	var Usuario nuevo = new Usuario(nombre, apellido, nacimiento, usuario, contraseña)
+   	//TODO Enviar eMail al usuario	
    }
    }
     	
@@ -26,6 +27,52 @@ class Sistema {
     		}
     	}
     	return true
+	}
+	
+	
+	def validarCuenta(String nombreUsuario, String codigo){
+		//Enviar eMail para 
+	}
+	
+	def Boolean esValido(String usuario){
+		for(Usuario u : this.usuarios)
+			{
+			if(u.nombreUsuario == usuario)
+				return u.validado	
+			}
+		 return false
+	}
+	
+	def ingresar(String usuario, String contraseña){
+		for(Usuario u : this.usuarios){
+			if(u.nombreUsuario == usuario){
+				if(!u.validado){
+					//TODO exception: cuenta no validada
+				}
+				if(u.contraseña == contraseña){
+				//TODO Ingreso con exito	
+				}
+			}
+		}
+	}
+	
+	def cambiarContraseña(String usuario, String contraseñaVieja, String contraseñaNueva){
+		if( usuarioExiste(usuario) && esValido(usuario)){
+			for(Usuario u : this.usuarios){
+				if(u.nombreUsuario == usuario)
+					{
+						if(u.contraseña == contraseñaVieja)
+								{
+									u.contraseña = contraseñaVieja
+								}
+								else
+								{
+								//TODO exception: error en contraseñaVieja	
+								}
+					}
+			}
+		}
+		//exception: No es valido
 	}
 	
 	

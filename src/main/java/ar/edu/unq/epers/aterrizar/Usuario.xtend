@@ -5,6 +5,7 @@ import java.util.Calendar
 import java.util.Date
 
 public class Usuario {
+	
 	@Accessors
 	
    
@@ -13,8 +14,9 @@ public class Usuario {
     public var String nombreUsuario //(debe ser unique)
     var String eMail
     var Date fechaNacimiento
-    var Boolean validado
-    var String contraseña
+    public var Boolean validado
+    public var String contraseña
+    var String codigo
 	
 	
     
@@ -25,6 +27,7 @@ public class Usuario {
     this.fechaNacimiento = nacimiento
   	this.contraseña =contraseña
   	this.validado = false
+  	this.codigo = ""
 
     }
     
