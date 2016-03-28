@@ -7,6 +7,7 @@ import java.sql.Connection
 import java.sql.DriverManager
 import java.util.function.Function
 import java.util.ArrayList
+import java.util.Date
 
 /**
  * Created by damian on 3/28/16.
@@ -25,12 +26,12 @@ class Repositorio {
     def guardarUsuario(Usuario usuario){
         excecute[conn|
             val ps = conn.prepareStatement("INSERT INTO usuario
-             (nombre, apellido, nombreUsuario, email, emailVerificado, contrasenia, codigoEmail ) VALUES (?,?,?,?,?,?,?)")
+             (nombre, apellido, nombreUsuario, email, emailVerificado, contrasenia, codigoEmail) VALUES (?,?,?,?,?,?,?)")
             ps.setString(1, usuario.nombre)
             ps.setString(2, usuario.apellido)
             ps.setString(3, usuario.nombreUsuario)
             ps.setString(4, usuario.getEMail)
-            ps.setString(5, usuario.getEmailVerificado)
+            ps.setBoolean(5, usuario.getEmailVerificado)
             ps.setString(6, usuario.contraseña)
             ps.setString(7, usuario.codigoEmail)
 

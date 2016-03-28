@@ -29,8 +29,10 @@ class TestSistema {
 		nombre = "foo"
 		apellido = "bar"
 		nombreUsuario = "foobar"
+		contraseña = "12345"
 		setEMail = "foo@bar.com"
 		codigoEmail = "abc"
+		emailVerificado = false
 	]
 	
 	@Before
@@ -40,6 +42,7 @@ class TestSistema {
 	@Test
 	def RegistrarUsuario(){
 		sistem.repositorio.guardarUsuario(usuario)
+		Assert.assrt(true)
 	}
 
   
