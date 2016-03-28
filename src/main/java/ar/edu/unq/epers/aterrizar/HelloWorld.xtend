@@ -7,9 +7,12 @@ class HelloWorld {
 	def static void main(String[] args) {
 		print("Hola Persistencia")
 		
-		var persona = new Persona
-		
-		persona.nombre = "Pepe"
-		persona.apellido = "Betazza" 
+		var persona = new Usuario() => [
+
+			nombre = "Pepe"
+			apellido = "Betazza"
+
+		]
+
 	}
 }

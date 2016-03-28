@@ -4,9 +4,11 @@ import org.eclipse.xtend.lib.annotations.Accessors
 import java.util.Calendar
 import java.util.Date
 
+
+@Accessors
 public class Usuario {
-	
-	@Accessors
+
+
 	
    
     var String nombre
@@ -17,19 +19,7 @@ public class Usuario {
     public var Boolean validado
     public var String contraseña
     var String codigo
-	
-	
-    
-    new(String nombre, String apellido, Date nacimiento, String usuario, String contraseña){
-    this.nombre = nombre
-    this.apellido = apellido
-    this.nombreUsuario = usuario
-    this.fechaNacimiento = nacimiento
-  	this.contraseña =contraseña
-  	this.validado = false
-  	this.codigo = ""
 
-    }
     
     
 
