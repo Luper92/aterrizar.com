@@ -10,7 +10,7 @@ import Persistencia.Repositorio
 
 class Sistema {
 	@Accessors
-	var Repositorio repositorio
+	var Repositorio repositorio = new Repositorio
 
     def registrar(Usuario usuario){
 		if(!usuarioExiste((usuario.nombreUsuario)))
