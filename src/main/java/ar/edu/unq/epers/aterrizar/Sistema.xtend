@@ -9,9 +9,11 @@ class Sistema {
 	@Accessors
     var List<Usuario> usuarios
     
-    def registrar(String nombre, String apellido, Date nacimiento, String usuario, String contraseña){
-   if(!usuarioExiste(usuario)){
-   	var Usuario nuevo = new Usuario(nombre, apellido, nacimiento, usuario, contraseña)
+    def registrar(Usuario usuario){  	
+   if(!usuarioExiste(usuario.nombreUsuario)){
+   	//String nombre, String apellido, Date nacimiento, String usuario, String contraseña
+   	//var Usuario nuevo = new Usuario(nombre, apellido, nacimiento, usuario, contraseña)
+   	this.usuarios.add(usuario)
    	//TODO Enviar eMail al usuario	
    }
    }
