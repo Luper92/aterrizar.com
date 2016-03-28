@@ -7,18 +7,15 @@ import java.util.Date
 
 @Accessors
 public class Usuario {
-
-
-	
    
     var String nombre
     var String apellido
     public var String nombreUsuario //(debe ser unique)
     var String eMail
     var Date fechaNacimiento
-    public var Boolean validado
+    public var Boolean emailVerificado
     public var String contraseña
-    var String codigo
+    var String codigoEmail
 
     
     

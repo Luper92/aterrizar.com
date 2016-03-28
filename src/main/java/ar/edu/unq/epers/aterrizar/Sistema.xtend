@@ -9,6 +9,7 @@ import exceptions.UserAllreadyExistException
 import Persistencia.Repositorio
 
 class Sistema {
+	@Accessors
 	var Repositorio repositorio
 
     def registrar(Usuario usuario){
@@ -34,7 +35,7 @@ class Sistema {
 		for(Usuario u : repositorio.usuarios)
 			{
 			if(u.nombreUsuario == usuario)
-				return u.validado	
+				return u.emailVerificado
 			}
 		 return false
 	}
@@ -42,7 +43,7 @@ class Sistema {
 	def ingresar(String usuario, String contraseña){
 		for(Usuario u : repositorio.usuarios){
 			if(u.nombreUsuario == usuario){
-				if(!u.validado){
+				if(!u.emailVerificado){
 					//TODO exception: cuenta no validada
 				}
 				if(u.contraseña == contraseña){

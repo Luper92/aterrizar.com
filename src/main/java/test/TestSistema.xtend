@@ -18,33 +18,38 @@ import org.mockito.Mock
 import ar.edu.unq.epers.aterrizar.Usuario
 import org.junit.Before
 import org.mockito.MockitoAnnotations
-import org.junit.Assert
+import org.junit.Assert.*
+import com.ibm.icu.impl.Assert
 
 @RunWith(MockitoJUnitRunner)
 
 class TestSistema {
 	val sistem = new Sistema()
-	
-	@Mock
-	Usuario us
-	
-	Date d
-	Usuario us2 = new Usuario("Luper","12345","","")
+	val usuario = new Usuario() => [
+		nombre = "foo"
+		apellido = "bar"
+		nombreUsuario = "foobar"
+		setEMail = "foo@bar.com"
+		codigoEmail = "abc"
+	]
 	
 	@Before
-def void init(){
-	MockitoAnnotations.initMocks(this)
-	
-	
-  }
+	def void init(){
+  	}
+
+	@Test
+	def RegistrarUsuario(){
+		sistem.repositorio.guardarUsuario(usuario)
+	}
+
   
-  @Test
-def registrarTest(){
-	Assert.assertEquals(sistem.usuarios.size,0)	 
-	sistem.registrar(us)
-	Assert.assertEquals(sistem.usuarios.size,1)
-	//Mockito.verify(fakeAdmin).add(lala)
-  }
+//  @Test
+//def registrarTest(){
+//	Assert.assertEquals(sistem.usuarios.size,0)
+//	sistem.registrar(us)
+//	Assert.assertEquals(sistem.usuarios.size,1)
+//	//Mockito.verify(fakeAdmin).add(lala)
+//  }
 	
 
 
