@@ -25,7 +25,7 @@ class Repositorio {
 
     def guardarUsuario(Usuario usuario){
         excecute[conn|
-            val ps = conn.prepareStatement("INSERT INTO usuario
+            val ps = conn.prepareStatement("INSERT INTO usuario 
              (nombre, apellido, nombreUsuario, email, emailVerificado, contrasenia, codigoEmail) VALUES (?,?,?,?,?,?,?)")
             ps.setString(1, usuario.nombre)
             ps.setString(2, usuario.apellido)
