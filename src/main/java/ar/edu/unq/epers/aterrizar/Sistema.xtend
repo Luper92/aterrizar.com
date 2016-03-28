@@ -23,15 +23,6 @@ class Sistema {
 	
 	def usuarioExiste(String usuario){
 		repositorio.usuarios.exists[ user | user.nombreUsuario == usuario]
-
-/*		 for(Usuario each : this.usuarios){
-		if(each.nombreUsuario == usuario)
-    		{
-    			//Tirar exception: usuario existente
-    		}
-    	}
-    	return true
-*/
 	}
 	
 	
@@ -40,7 +31,7 @@ class Sistema {
 	}
 	
 	def Boolean esValido(String usuario){
-		for(Usuario u : this.usuarios)
+		for(Usuario u : repositorio.usuarios)
 			{
 			if(u.nombreUsuario == usuario)
 				return u.validado	
@@ -49,7 +40,7 @@ class Sistema {
 	}
 	
 	def ingresar(String usuario, String contraseña){
-		for(Usuario u : this.usuarios){
+		for(Usuario u : repositorio.usuarios){
 			if(u.nombreUsuario == usuario){
 				if(!u.validado){
 					//TODO exception: cuenta no validada
@@ -63,7 +54,7 @@ class Sistema {
 	
 	def cambiarContraseña(String usuario, String contraseñaVieja, String contraseñaNueva){
 		if( usuarioExiste(usuario) && esValido(usuario)){
-			for(Usuario u : this.usuarios){
+			for(Usuario u : repositorio.usuarios){
 				if(u.nombreUsuario == usuario)
 					{
 						if(u.contraseña == contraseñaVieja)
