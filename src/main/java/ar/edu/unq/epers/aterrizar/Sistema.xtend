@@ -4,31 +4,34 @@ import org.eclipse.xtend.lib.annotations.Accessors
 import java.util.List
 import java.util.Calendar
 import java.util.Date
+import exceptions.NotExistUserException
+import exceptions.UserAllreadyExistException
+import Persistencia.Repositorio
 
 class Sistema {
-	@Accessors
-    var List<Usuario> usuarios
-    
-    def registrar(Usuario usuario){  	
-   if(!usuarioExiste(usuario.nombreUsuario)){
-   	//String nombre, String apellido, Date nacimiento, String usuario, String contraseña
-   	//var Usuario nuevo = new Usuario(nombre, apellido, nacimiento, usuario, contraseña)
-   	this.usuarios.add(usuario)
-   	//TODO Enviar eMail al usuario	
-   }
-   }
+	var Repositorio repositorio
+
+    def registrar(Usuario usuario){
+		if(!usuarioExiste((usuario.nombreUsuario)))
+			repositorio.usuarios.add(usuario)
+		else
+			throw new UserAllreadyExistException
+	}
     	
     	
     
 	
 	def usuarioExiste(String usuario){
-		 for(Usuario each : this.usuarios){
+		repositorio.usuarios.exists[ user | user.nombreUsuario == usuario]
+
+/*		 for(Usuario each : this.usuarios){
 		if(each.nombreUsuario == usuario)
     		{
     			//Tirar exception: usuario existente
     		}
     	}
     	return true
+*/
 	}
 	
 	
