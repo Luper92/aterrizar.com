@@ -15,6 +15,7 @@ import ar.edu.unq.epers.aterrizar.model.Like
 import ar.edu.unq.epers.aterrizar.model.Dislike
 import ar.edu.unq.epers.aterrizar.model.Comment
 import ar.edu.unq.epers.aterrizar.model.Visibility
+import java.util.ArrayList
 
 @Accessors
 @Table(keyspace = "persistenciaPerfiles", name = "perfilesUsuarios")
@@ -23,18 +24,20 @@ class PerfilCache {
 	@Column (name="userName")
 	String userName
 	@Column (name="destinies")
-	@Frozen("List< frozen<destinyCache>>")
+	@FrozenValue //("List< frozen<DestinyCache>>")
 	List<DestinyCache> destinies
+	//@FrozenValue
+	//List<Destiny> destinies = new ArrayList<Destiny>
 	@Column (name="visibility")
 	String visibility
 	
 	
 	new(Perfil p){
 		this.userName = p.username
-		destinies = newArrayList
+		destinies = new ArrayList<DestinyCache>
 		for(Destiny d : p.destinations){
-		var dest = new DestinyCache(d)
-		destinies.add(dest)
+		//var dest = new DestinyCache(d)
+		//destinies.add(dest)
 		}
 	}
 	
@@ -42,27 +45,41 @@ class PerfilCache {
 	
 	new(Perfil p, Visibility visibility) {
 		this.userName = p.username
-		destinies = newArrayList
+		this.destinies = new ArrayList<DestinyCache>
 		for(Destiny d : p.destinations){
 		var dest = new DestinyCache(d)
 		destinies.add(dest)
-		visibility = visibility.toString
+		//destinies.add(d)
 		}
+		visibility = visibility.toString
 	}
 	
 	def asPerfil(){
-		var Perfil p = new Perfil()
+		var Perfil p = new Perfil(this.userName)
+		//List<DestinyCache> list = this.destinies.all()
+		//var result = new ArrayList<DestinyCache>
+		//var result = new ArrayList<Destiny>
 		
-		for(DestinyCache d : this.destinies){
-			p.destinations.add(d.asDestiny())
+		var List<DestinyCache> list = destinies
+				
+				
+		for( DestinyCache each : list){
+			var Destiny d = each.asDestiny
+			p.destinations.add(d)
+	//		p.destinations.add(d.asDestiny())
+			//p.destinations = destinies
+			}  
+			//p. = visibility.toString
+			
+			
+				return p
 		}
+	
+	
 		
-		
-		p
-		
+	
 	}
-	 
-	}
+	
 	
 	
 	

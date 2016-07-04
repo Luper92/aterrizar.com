@@ -11,8 +11,11 @@ import ar.edu.unq.epers.aterrizar.model.Like
 import ar.edu.unq.epers.aterrizar.model.Dislike
 import ar.edu.unq.epers.aterrizar.exceptions.UsuarioNoTieneAsientoEnDestinoException
 import ar.edu.unq.epers.aterrizar.exceptions.UsuarioNoTienePermisoParaMGoNMGException
+import org.eclipse.xtend.lib.annotations.Accessors
 
+@Accessors
 class PerfilService {
+	var PerfilCacheService pcs
 	MongoHome<Perfil> perfilHome
 	SocialNetworkingService networkService
 	TramoService tramoService
@@ -21,7 +24,8 @@ class PerfilService {
 	new(MongoHome<Perfil> c, SocialNetworkingService networkService, TramoService tramoService) {
 		this.perfilHome = c
 		this.networkService = networkService
-		this.tramoService = tramoService 
+		this.tramoService = tramoService
+		pcs = new PerfilCacheService 
 	}
 	
 	def Perfil getPerfil(Usuario u) {
@@ -78,9 +82,50 @@ class PerfilService {
 	}
 
 	def stalkear(Usuario miUsuario, Usuario aStalkear) {
-		if(miUsuario.nombreDeUsuario == aStalkear.nombreDeUsuario) return this.getPerfil(aStalkear)
-		if(networkService.theyAreFriends(miUsuario, aStalkear)) return perfilHome.stalkearAmigo(aStalkear)			
-		else return perfilHome.stalkearNoAmigo(aStalkear)	
-	}
+		//Revisar si no está en la cache
+		var PerfilCacheService pcs = new PerfilCacheService
+		var Perfil perfilEnCache
+		 
+		
+		if(miUsuario.nombreDeUsuario == aStalkear.nombreDeUsuario){
+		perfilEnCache = pcs.get(aStalkear.nombreDeUsuario)
+				if(perfilEnCache == null){
+				perfilEnCache = this.perfilHome.getPerfil(aStalkear)
+				pcs.savePerfil(perfilEnCache)
+				return perfilEnCache
+				}
+				else
+				println("Se busco info de la cache. Busqueda reciente de uno mismo encontrada")
+				return perfilEnCache
+		}
+		
+		
+		
+		 //Si son amigos
+		if(networkService.theyAreFriends(miUsuario, aStalkear)){
+			perfilEnCache = pcs.getPerfilAmigo(aStalkear.nombreDeUsuario)
+			if(perfilEnCache != null){
+				 println("Se busco info de la cache. Busqueda reciente de amigo encontrada")
+				 return perfilEnCache
+				 }
+				 else
+				perfilEnCache = this.perfilHome.stalkearAmigo(aStalkear)
+				if(perfilEnCache != null){	
+				pcs.savePerfilAmigo(perfilEnCache)
+				return perfilEnCache
+					}
+				}
+			else
+		//O sea, es un desconocido el que consulta
+		perfilEnCache = pcs.getPerfilNoAmigo(aStalkear.nombreDeUsuario)
+			if(perfilEnCache == null){
+				perfilEnCache = this.perfilHome.stalkearNoAmigo(aStalkear) 
+				//pcs.savePerfilNoAmigo(perfilEnCache)
+				return perfilEnCache
+				}
+			else
+    		println("Se busco info de la cache. Busqueda reciente de no amigo encontrada")
+    		return perfilEnCache
+  }
 	
 }

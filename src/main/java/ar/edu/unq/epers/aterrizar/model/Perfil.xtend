@@ -17,12 +17,14 @@ class Perfil {
 	@JsonProperty("_id")
 	String id
 	
-	new() {}
+	new() {
+		this.destinations = new ArrayList<Destiny>
+	}
 	
 
 	new(String username) {
 		this.username = username
-		this.destinations = new ArrayList()
+		this.destinations = new ArrayList<Destiny>
 	}
 	
 	

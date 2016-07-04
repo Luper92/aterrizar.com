@@ -22,6 +22,7 @@ import ar.edu.unq.epers.aterrizar.cassandra.DislikeCache
 import ar.edu.unq.epers.aterrizar.model.Comment
 import ar.edu.unq.epers.aterrizar.model.Visibility
 import com.datastax.driver.core.Row
+import com.datastax.driver.core.ResultSet
 
 @Accessors
 class CassandraConector {
@@ -86,7 +87,7 @@ class CassandraConector {
 			"visibility text ); "
 		)
 		
-		session.execute("CREATE TYPE IF NOT EXISTS persistenciaPerfiles.destinyCache (" +
+		session.execute("CREATE TYPE IF NOT EXISTS persistenciaPerfiles.DestinyCache (" +
 			"destinyName text, " +
 			"visibility text , " +
 			"comments list<frozen<comentarioCache>> , " +
@@ -101,8 +102,9 @@ class CassandraConector {
 		
 		
 		session.execute("CREATE TABLE IF NOT EXISTS persistenciaPerfiles.perfilesUsuarios (" + 
-				"userName text, " +
+				"username text, " +
 				"destinies list<frozen<destinyCache>>,  " +
+			//	"destinies list< frozen<Destino> >," +
 				"visibility text, " +  
 				"PRIMARY KEY (userName));" 
 				
@@ -152,14 +154,17 @@ def savePerfil(Perfil p){
 	
 	def getPerfil(String userName){
 		var unPerfilCache = mapperPerfil.get(userName)
-		if(unPerfilCache == null)
+		//var ResultSet results
+		//results = session.execute("SELECT * FROM perfilesUsuarios WHERE userName='cristian'");
+		var results = unPerfilCache
+		if( results == null)
 		return null
 		else
 		
 		//ResultSet results
 		//var result2 = session.execute("SELECT * FROM perfilesUsuarios WHERE userName='cristian'");
 		//result2.findFirst[] as PerfilCache
-		unPerfilCache.asPerfil()
+		return unPerfilCache.asPerfil()
 	}
 	
 	def deletePerfil(String userName){
@@ -204,8 +209,8 @@ def savePerfil(Perfil p){
 	}
 	
 	def savePerfilAmigo(Perfil p){
-		var perfil = new PerfilCache(p, Visibility.AMIGOS)
-		mapperPerfil.save(perfil)
+		var perfilCache = new PerfilCache(p, Visibility.AMIGOS)
+		mapperPerfil.save(perfilCache)
 	}
 	
 	def savePerfilNoAmigo(Perfil p){

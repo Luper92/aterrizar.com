@@ -36,7 +36,7 @@ class PerfilCacheService {
 		
 	}
 	
-	def save(Perfil p){
+	def savePerfil(Perfil p){
 		dao.savePerfil(p)
 	}
 	
@@ -60,6 +60,7 @@ class PerfilCacheService {
 	def clean() {
 dao.clean
 	}
+	
 	
 	/*
 	CassandraConector cc = new CassandraConector
@@ -94,3 +95,5 @@ dao.clean
 	* 
 	*/
 }
+
+

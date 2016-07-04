@@ -12,6 +12,7 @@ import com.datastax.driver.mapping.annotations.Frozen
 import ar.edu.unq.epers.aterrizar.model.Comment
 import ar.edu.unq.epers.aterrizar.model.Like
 import ar.edu.unq.epers.aterrizar.model.Dislike
+import ar.edu.unq.epers.aterrizar.model.Visibility
 
 @Accessors
 @UDT (keyspace = "persistenciaPerfiles" , name ="destinyCache")
@@ -32,7 +33,11 @@ List<LikeCache> likes
 List<DislikeCache> dislikes
 
 
-new(){}
+new(){
+	comments = newArrayList
+	likes = newArrayList
+	dislikes = newArrayList
+}
 	
 	new(Destiny destino){
 		this.destinyName = destino.nombre
@@ -60,6 +65,7 @@ new(){}
 		
 		
 		var Destiny d = new Destiny()
+		
 		for(LikeCache lk : this.likes){
 			d.likes.add(lk.asLike())
 		}
@@ -73,7 +79,17 @@ new(){}
 		}
 		
 		d.nombre = this.destinyName
-		d
+		
+		if(this.visibility == "PUBLICO") 
+			d.visibility = Visibility.PUBLICO
+			else
+			if(this.visibility == "AMIGOS") 
+			d.visibility = Visibility.AMIGOS
+			else
+			d.visibility = Visibility.PRIVADO
+			
+			
+			return d
 		
 	}
 
