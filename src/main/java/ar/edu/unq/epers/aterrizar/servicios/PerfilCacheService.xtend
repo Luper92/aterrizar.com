@@ -2,8 +2,9 @@ package ar.edu.unq.epers.aterrizar.servicios
 
 import ar.edu.unq.epers.aterrizar.model.Perfil
 import ar.edu.unq.epers.aterrizar.home.CassandraConector
+import ar.edu.unq.epers.aterrizar.model.Visibility
 
-class PerfilFotoService {
+class PerfilCacheService {
 	
 	
 	CassandraConector dao
@@ -16,12 +17,36 @@ class PerfilFotoService {
  	def guardar(Perfil perfil){
 		dao.savePerfil(perfil)
 		
+		
 	}
 	
+	def get(String username){
+		dao.getPerfil(username)
+	}
 	
+	def getPerfilAmigo(String username){
+		dao.getPerfilAmigo(username)
+	}
 	
+	def getPerfilNoAmigo(String username){
+		dao.getPerfilNoAmigo(username)
+	}
 	
+	def get(String userName, String destName){
 		
+	}
+	
+	def save(Perfil p){
+		dao.savePerfil(p)
+	}
+	
+	def savePerfilAmigo(Perfil p){
+		dao.savePerfilAmigo(p)
+	}
+	
+	def savePerfilNoAmigo(Perfil p){
+		dao.savePerfilNoAmigo(p)
+	}	
 	 
 	
 	def cleanDB(){
