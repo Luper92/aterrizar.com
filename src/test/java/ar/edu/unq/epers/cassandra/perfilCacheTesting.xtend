@@ -35,9 +35,6 @@ import ar.edu.unq.epers.aterrizar.servicios.PerfilCacheService
 class perfilCacheTesting {
 	
 	//Parte mongoDB
-	
-	
-	
 	PerfilService service
 	MongoHome<Perfil> home
 	Usuario usuarioPepe
@@ -83,20 +80,6 @@ class perfilCacheTesting {
     VueloOfertado vuelo5 
 	
 	
-	/* Cassandra*/
-	
-	PerfilCacheService pfs
-	
-	Perfil perfil1
-	
-	Perfil perfil2
-	Destiny destiny1
-	
-	Perfil perfil3
-	Destiny destiny2
-	Comment comment1
-	
-	
 	 def void setUpHibernate(){
 
         homeBase = new BaseHome()
@@ -108,7 +91,6 @@ class perfilCacheTesting {
             email = "abc@123.com"
             nacimiento = new Date(2015,10,1)
         ]
-        
         serviceTramo = new TramoService
         serviceAsiento = new AsientoService
 
@@ -177,64 +159,9 @@ class perfilCacheTesting {
 	
 	
 	
-
-	
-	// ********** Parte Cassandra - Cache -
-	
-	
-	def void setUpCassandra(){
-		perfil1 = new Perfil("cristian")
-
-		destiny1 = new Destiny =>[
-			 id = "01"
-			nombre = "San Clemente"
-			likes = newArrayList
-			dislikes = newArrayList
-			comments = newArrayList
-			visibility = Visibility.PUBLICO	
-		]
-				
-		perfil2 = new Perfil =>[
-			username = "diego"
-			destinations = newArrayList	
-		]
-		
-		perfil2.destinations.add(destiny1)
-		
-		
-		perfil3 = new Perfil =>[
-			username = "lucian"
-			destinations = newArrayList
-		]
-			
-		destiny2 = new Destiny =>[
-			 id = "02"
-			nombre = "Mar del Tuyu"
-			likes = newArrayList
-			dislikes = newArrayList
-			comments = newArrayList
-			visibility = Visibility.PUBLICO	
-		]
-		
-		comment1 = new Comment=>[
-		description = "una descripcion decente"
-		]
-		
-		destiny2.add(comment1)
-		//perfil3.addDestiny(destiny2)
-		perfil3.destinations.add(destiny2)
-		
-		pfs = new PerfilCacheService
-	}
-	
-
-	
-	
-	
 	@Before
 	def void setUp() {
 		this.setUpHibernate()
-		this.setUpCassandra()
 		home = DocumentsServiceRunner.instance().collection(Perfil)
 		socialService = new SocialNetworkingService
 		tramoService = new TramoService
@@ -268,48 +195,22 @@ class perfilCacheTesting {
 		asiento = new Asiento
 		tramo = new Tramo("Berazategui", "Mar del plata")
 		homeBase = new BaseHome
-		
-		
-		
-		
 	}
 	
 	
 	
 	
 	@Test
-	def void guardarPerfil(){
-		
-		pfs.guardar(perfil2)
-		var perfil3 = pfs.get(perfil2.username)
-		Assert.assertEquals(perfil2.username, perfil3.username)
-		
+	def void getPerfil() {
+		service.addPerfil(usuarioPepe)
+		var perfilPepe = service.getPerfil(usuarioPepe)
+		Assert.assertEquals(perfilPepe.username, "pepe")
+		service.addPerfil(usuarioLuis)
+		var perfilLuis = service.getPerfil(usuarioLuis)
+		Assert.assertEquals(perfilLuis.username, "luis")
 	}
 	
-	
-	
-	@Test
-	def void guardarPerfilConDestino(){
-	
-	pfs.guardar(perfil2)
-	var unPerfil = pfs.get(perfil2.username)
-	Assert.assertEquals(unPerfil.username, perfil2.username)
-		
-	}
-	
-	
-	@Test
-	def void guardarPerfilConDestinoYComentario(){
-	pfs.guardar(perfil3)
-	var unPerfil = pfs.get(perfil3.username)
-	Assert.assertEquals(unPerfil.username, perfil3.username)
-		
-	}
-	
-	
-	
-	
-	/*parte mongo*/
+	/*parte mongo, agregando cassandra esta vez*/
 	
 	@Test
 	def void stalkearYoMismoTest() {
@@ -320,6 +221,8 @@ class perfilCacheTesting {
 		service.addVisibility(usuarioPepe, marDelPlataDestiny, visibilityPrivado)
 		service.addVisibility(usuarioPepe, marDelPlataDestiny, queFrio, visibilityPrivado)
 		val perfilPepe = service.stalkear(usuarioPepe, usuarioPepe)
+		//Al ejecutar por segunda vez la busqueda, enn vez de buscar en mongo, se ccede a la cache.
+		//Al hacer esto, aparece el mensaje confirmando que la busqueda fue desde la cache
 		val perfilPepe2 = service.stalkear(usuarioPepe, usuarioPepe)
 		Assert.assertEquals(perfilPepe2.destinations.get(0).visibility.toString, "PRIVADO")
 		//Assert.assertEquals(perfilPepe2.destinations.get(0).comments.get(0).visibility.toString, "PRIVADO")
@@ -343,10 +246,11 @@ class perfilCacheTesting {
 		service.addVisibility(usuarioPepe, marDelPlataDestiny, queFrio, visibilityPublico)
 		service.addVisibility(usuarioPepe, marDelPlataDestiny, queCalor, visibilityPrivado)
 		service.addVisibility(usuarioPepe, marDelPlataDestiny, queAburrido, visibilityAmigos)
-		val perfilPepe = service.stalkear(usuarioJuanAmigoDeNadie, usuarioPepe)
-		val perfilPepe2 = service.stalkear(usuarioJuanAmigoDeNadie, usuarioPepe)
-		Assert.assertEquals(perfilPepe2.destinations.size, 1)
-		Assert.assertEquals(perfilPepe2.destinations.get(0).nombre, "Mar del plata")
+			val perfilPepe = service.stalkear(usuarioJuanAmigoDeNadie, usuarioPepe)
+			
+			val perfilPepe2 = service.stalkear(usuarioJuanAmigoDeNadie, usuarioPepe)
+		Assert.assertEquals(perfilPepe.destinations.size, 1)
+		Assert.assertEquals(perfilPepe.destinations.get(0).nombre, "Mar del plata")
 		//Assert.assertEquals(perfilPepe.destinations.get(0).comments.size, 1)
 		//Assert.assertEquals(perfilPepe.destinations.get(0).comments.get(0).description, "que frio")
 	}
@@ -376,10 +280,11 @@ class perfilCacheTesting {
 		Assert.assertEquals(perfilLuis2.destinations.size, 2)
 		Assert.assertEquals(perfilLuis2.destinations.get(0).nombre, "Mar del plata")
 		Assert.assertEquals(perfilLuis2.destinations.get(1).nombre, "bariloche")
-		//Assert.assertEquals(perfilLuis.destinations.get(0).comments.size, 2)
-		//Assert.assertEquals(perfilLuis.destinations.get(0).comments.get(0).description, "que frio")
+		Assert.assertEquals(perfilLuis.destinations.get(0).comments.size, 3)
+		Assert.assertEquals(perfilLuis.destinations.get(0).comments.get(0).description, "que frio")
 		//si comentaio tuviera visibilidad el proximo test se debe cambiar "que calor" por "que aburrido"
-		//Assert.assertEquals(perfilLuis.destinations.get(0).comments.get(1).description, "que calor")
+		Assert.assertEquals(perfilLuis.destinations.get(0).comments.get(1).description, "que calor")
+		Assert.assertEquals(perfilLuis.destinations.get(0).comments.get(2).description, "que aburrido")
 	}
 	
 	@After
