@@ -62,13 +62,15 @@ class PerfilCache {
 		
 		var List<DestinyCache> list = destinies
 				
-				
-		for( DestinyCache each : list){
-			var Destiny d = each.asDestiny
-			p.destinations.add(d)
-	//		p.destinations.add(d.asDestiny())
-			//p.destinations = destinies
-			}  
+		
+		//for( DestinyCache each : list){
+			//var Destiny d = each.asDestiny
+			//p.destinations.add(d)
+			p.destinations = newArrayList()
+			
+	//	--	p.destinations.add(d.asDestiny())
+			// --p.destinations = destinies
+		  
 			//p. = visibility.toString
 			
 			

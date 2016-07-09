@@ -2,6 +2,7 @@ package ar.edu.unq.epers.aterrizar.home
 
 import ar.edu.unq.epers.aterrizar.cassandra.PerfilCache
 import com.datastax.driver.core.querybuilder.QueryBuilder
+import ar.edu.unq.epers.aterrizar.cassandra.PerfilEnCache
 
 class PerfilCacheHome {
 	
@@ -11,14 +12,14 @@ class PerfilCacheHome {
 	new(){
 	}
 	
-	def void save(PerfilCache cache) {
+	def void save(PerfilEnCache cache) {
 		
-		managerCassandra.mapper.save(cache)
+		managerCassandra.mapperPerfil.save(cache)
 	}
 	
-	def PerfilCache getPerfil(String userName){ 
+	def PerfilEnCache getPerfil(String userName){ 
 		
-		managerCassandra.mapper.get(userName)
+		managerCassandra.mapperPerfil.get(userName)
 	}
 	
 	def updatePerfil(String userName){

@@ -13,6 +13,7 @@ import ar.edu.unq.epers.aterrizar.model.Comment
 import ar.edu.unq.epers.aterrizar.model.Like
 import ar.edu.unq.epers.aterrizar.model.Dislike
 import ar.edu.unq.epers.aterrizar.model.Visibility
+import com.datastax.driver.mapping.annotations.FrozenValue
 
 @Accessors
 @UDT (keyspace = "persistenciaPerfiles" , name ="destinyCache")
@@ -23,13 +24,17 @@ String destinyName
 @Field (name="visibility")
 String visibility
 @Field (name="comments")
-@Frozen("List< frozen<comentarioCache>>")
+/*
+@FrozenValue //("List< frozen<DestinyCache>>")
+List<DestinyCache> destinies
+*/
+@FrozenValue
 List<ComentarioCache> comments
 @Field (name="likes")
-@Frozen("List< frozen<likesCache>>")
+@FrozenValue
 List<LikeCache> likes
 @Field (name="dislikes")
-@Frozen("List< frozen<dislikesCache>>")
+@FrozenValue
 List<DislikeCache> dislikes
 
 

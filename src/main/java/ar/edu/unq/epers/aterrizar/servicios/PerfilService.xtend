@@ -102,17 +102,19 @@ class PerfilService {
 		
 		
 		
-			def buscarPerfilPropio(Usuario miUsuario){
-			
-			var perfilEnCache = pcs.get(miUsuario.nombreDeUsuario)
-				if(perfilEnCache == null){
+			def Perfil buscarPerfilPropio(Usuario miUsuario){
+						var result =  pcs.get(miUsuario.nombreDeUsuario)
+			var Perfil perfilEnCache
+				if(result == null){
 				perfilEnCache = this.perfilHome.getPerfil(miUsuario)
-				println("No se encontro perfil publico en la caché. Se procede a guardarlo")
+				println("No se encontro perfil propio en la caché. Se procede a guardarlo")
 				pcs.savePerfil(perfilEnCache)
 				return perfilEnCache
 				}
 				else
-				println("Se busco info de la cache. Busqueda reciente de un perfil publico encontrada")
+				println("Se busco info de la cache. Busqueda reciente de mi propio perfil encontrada")
+				//return result.asPerfil()
+				perfilEnCache = result
 				return perfilEnCache
 			
 		}

@@ -38,6 +38,8 @@ class PerfilCacheService {
 	
 	def savePerfil(Perfil p){
 		dao.savePerfil(p)
+		println("Se guardo el perifl en cache")
+		
 	}
 	
 	def savePerfilAmigo(Perfil p){
