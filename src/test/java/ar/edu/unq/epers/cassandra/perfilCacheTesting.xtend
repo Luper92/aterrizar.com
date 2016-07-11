@@ -277,17 +277,23 @@ class perfilCacheTesting {
 		socialService.amigoDe(usuarioPepe, usuarioLuis)
 
 		service.addDestiny(usuarioPepe, marDelPlataDestiny)
+		service.addDestiny(usuarioPepe, barilocheDestiny)
+		
+		
 		service.addComment(usuarioPepe, marDelPlataDestiny, queFrio)
 		service.addVisibility(usuarioPepe, marDelPlataDestiny, visibilityPrivado)
 		service.addVisibility(usuarioPepe, marDelPlataDestiny, queFrio, visibilityPrivado)
 		var perfilPepe = service.stalkear(usuarioPepe, usuarioPepe)
 		// Al ejecutar por segunda vez la busqueda, enn vez de buscar en mongo, se ccede a la cache.
 		// Al hacer esto, aparece el mensaje confirmando que la busqueda fue desde la cache
-		var perfilPepe2 = service.stalkear(usuarioPepe, usuarioPepe)
+		var perfilPepe2 = service.stalkear(usuarioLuis, usuarioPepe)
 		service.addVisibility(usuarioPepe, marDelPlataDestiny, visibilityPrivado)
+						service.addVisibility(usuarioPepe, barilocheDestiny, visibilityPrivado)
 		var perfilPepeAmigo = service.stalkear(usuarioLuis, usuarioPepe)
 		perfilPepeAmigo = service.stalkear(usuarioLuis, usuarioPepe)
-		//Assert.assertEqualsperfilPepe.
+		Assert.assertEquals(perfilPepe.destinations.size, 2)
+		Assert.assertEquals(perfilPepe2.destinations.size, 0)
+		
 	}
 
 	@After
