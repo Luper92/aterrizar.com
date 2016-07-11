@@ -1,29 +1,14 @@
 package ar.edu.unq.epers.aterrizar.home
 
+import ar.edu.unq.epers.aterrizar.cassandra.PerfilEnCache
+import ar.edu.unq.epers.aterrizar.model.Perfil
+import ar.edu.unq.epers.aterrizar.model.Visibility
 import com.datastax.driver.core.Cluster
 import com.datastax.driver.core.Session
-import com.datastax.driver.core.policies.DefaultRetryPolicy
-import com.datastax.driver.core.policies.DCAwareRoundRobinPolicy
-import com.datastax.driver.core.policies.TokenAwarePolicy
-import ar.edu.unq.epers.aterrizar.cassandra.PerfilCache
+import com.datastax.driver.extras.codecs.enums.EnumNameCodec
 import com.datastax.driver.mapping.Mapper
 import com.datastax.driver.mapping.MappingManager
-import ar.edu.unq.epers.aterrizar.model.Perfil
-import java.awt.DefaultFocusTraversalPolicy
-import com.datastax.driver.core.Host
 import org.eclipse.xtend.lib.annotations.Accessors
-import ar.edu.unq.epers.aterrizar.cassandra.FotoCache
-import ar.edu.unq.epers.aterrizar.model.Foto
-import ar.edu.unq.epers.aterrizar.model.Destiny
-import ar.edu.unq.epers.aterrizar.cassandra.DestinyCache
-import ar.edu.unq.epers.aterrizar.cassandra.ComentarioCache
-import ar.edu.unq.epers.aterrizar.cassandra.LikeCache
-import ar.edu.unq.epers.aterrizar.cassandra.DislikeCache
-import ar.edu.unq.epers.aterrizar.model.Comment
-import ar.edu.unq.epers.aterrizar.model.Visibility
-import com.datastax.driver.core.Row
-import com.datastax.driver.core.ResultSet
-import ar.edu.unq.epers.aterrizar.cassandra.PerfilEnCache
 
 @Accessors
 class CassandraConector {
@@ -31,31 +16,17 @@ class CassandraConector {
 	Cluster cluster
 	Session session
 	Mapper<PerfilEnCache> mapperPerfil
-	//Mapper<FotoCache> mapperFoto
-	//Mapper<DestinyCache> mapperDestino
-	//Mapper<ComentarioCache> mapperComentario
-	//Mapper<LikeCache> mapperLike
-	//Mapper<DislikeCache> mapperDislike
-	
-	
-	
-		
 	
 	new(){
 		connect
-		//createSession()
-		//createCacheSchema()
+	
 	}
 
 	def connect() {
 		cluster = Cluster.builder().addContactPoint("localhost").build()
 		session = cluster.connect()
-		//val metadata = cluster.getMetadata();
-		//System.out.printf("Connected to cluster: %s\n", metadata.getClusterName());
-		//for (Host host : metadata.getAllHosts()) {
-			//System.out.printf("Datatacenter: %s; Host: %s; Rack: %s\n", host.getDatacenter(), host.getAddress(),
-			//	host.getRack());
-		//}
+		
+		
 		createCacheSchema
 		
 		
@@ -71,6 +42,9 @@ class CassandraConector {
 	def createCacheSchema(){
 		
 		
+		
+								cluster.getConfiguration().getCodecRegistry()
+        							.register(new EnumNameCodec<Visibility>(Visibility));
 		 
 		session.execute("CREATE KEYSPACE IF NOT EXISTS persistenciaPerfiles
 			WITH replication = {'class':'SimpleStrategy','replication_factor':3}")
@@ -86,13 +60,13 @@ class CassandraConector {
 		session.execute("CREATE TYPE IF NOT EXISTS persistenciaPerfiles.comment (" +
 			"id text, " +
 			"description text, " +
-			"visibility text ); "
+						"visibility varchar ); "
 		)
 		
 		session.execute("CREATE TYPE IF NOT EXISTS persistenciaPerfiles.destiny (" +
 			"id text, " +
 			"nombre text, " +
-			"visibility text , " +
+						"visibility varchar , " +
 			"comments list<frozen<comment>> , " +
 			"likes list<frozen<like>> , " +
 			"dislikes list<frozen<dislike>> ); "  
@@ -117,16 +91,9 @@ class CassandraConector {
 				
 		)
 		
-		
-		
-		
 		mapperPerfil = new MappingManager(session).mapper(PerfilEnCache)
 		
 		}	
-		
-		
-		
-		
 		
 		
 	def getSession() {
@@ -170,20 +137,6 @@ def savePerfil(Perfil p){
 		 }
 		 return perfil
 		 
-		 
-		//var unPerfilEnCache = mapperPerfil.get(userName, Visibility.PRIVADO.toString)
-					
-		//var ResultSet results
-		//results = session.execute("SELECT * FROM perfilesUsuarios WHERE userName='cristian'");
-		//var results = unPerfilEnCache
-		//if( results == null)
-		//return null
-		//else
-		
-		//ResultSet results
-		//var result2 = session.execute("SELECT * FROM perfilesUsuarios WHERE userName='cristian'");
-		//result2.findFirst[] as PerfilCache
-		//return unPerfilEnCache.asPerfil()
 	}
 	
 	def deletePerfil(String userName){

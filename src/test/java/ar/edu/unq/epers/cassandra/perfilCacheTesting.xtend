@@ -22,19 +22,18 @@ import ar.edu.unq.epers.aterrizar.servicios.PerfilService
 import ar.edu.unq.epers.aterrizar.servicios.SocialNetworkingService
 import ar.edu.unq.epers.aterrizar.servicios.TramoService
 import java.sql.Date
+import org.eclipse.xtend.lib.annotations.Accessors
 import org.hibernate.Session
 import org.hibernate.SessionFactory
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.eclipse.xtend.lib.annotations.Accessors
-import ar.edu.unq.epers.aterrizar.servicios.PerfilCacheService
 
 @Accessors
 class perfilCacheTesting {
-	
-	//Parte mongoDB
+
+	// Parte mongoDB
 	PerfilService service
 	MongoHome<Perfil> home
 	Usuario usuarioPepe
@@ -58,107 +57,96 @@ class perfilCacheTesting {
 	BaseHome homeBase
 	Asiento asiento
 	Tramo tramo
-	
-	
+
 	/*  Hibernate   */
-	 
-    var Usuario user
-    var TramoService serviceTramo
-    var AsientoService serviceAsiento
-    var BaseService servicioBase = new BaseService
+	var Usuario user
+	var TramoService serviceTramo
+	var AsientoService serviceAsiento
+	var BaseService servicioBase = new BaseService
 
-    SessionFactory sessionFactory;
-    Session session = null;
-    Asiento asiento1
-    Asiento asiento2
-    Asiento asiento3
-    Tramo tramo3
-    VueloOfertado vuelo1
-    VueloOfertado vuelo2
-    VueloOfertado vuelo3
-    VueloOfertado vuelo4
-    VueloOfertado vuelo5 
-	
-	
-	 def void setUpHibernate(){
+	SessionFactory sessionFactory;
+	Session session = null;
+	Asiento asiento1
+	Asiento asiento2
+	Asiento asiento3
+	Tramo tramo3
+	VueloOfertado vuelo1
+	VueloOfertado vuelo2
+	VueloOfertado vuelo3
+	VueloOfertado vuelo4
+	VueloOfertado vuelo5
 
-        homeBase = new BaseHome()
+	def void setUpHibernate() {
 
-        SessionManager::getSessionFactory().openSession()
-        user = new Usuario => [
-            nombreDeUsuario = "alan1000"
-            nombreYApellido = "alan ferreira"
-            email = "abc@123.com"
-            nacimiento = new Date(2015,10,1)
-        ]
-        serviceTramo = new TramoService
-        serviceAsiento = new AsientoService
+		homeBase = new BaseHome()
 
+		SessionManager::getSessionFactory().openSession()
+		user = new Usuario => [
+			nombreDeUsuario = "alan1000"
+			nombreYApellido = "alan ferreira"
+			email = "abc@123.com"
+			nacimiento = new Date(2015, 10, 1)
+		]
+		serviceTramo = new TramoService
+		serviceAsiento = new AsientoService
 
+		tramo = new Tramo => [
 
+			origen = "Buenos Aires"
+			destino = "Mar del plata"
+			llegada = new Date(116, 07, 01)
+			salida = new Date(1500)
 
-        tramo = new Tramo => [
+			asiento1 = new Asiento => [
+				nombre = "c 1"
+				categoria = new Primera(1000)
+			]
 
-            origen = "Buenos Aires"
-            destino = "Mar del plata"
-            llegada = new Date(116,07,01)
-            salida = new Date(1500)
-            
-            asiento1 = new Asiento => [
-                    nombre = "c 1"
-                    categoria = new Primera(1000)
-                ]
-               
-            asiento2 =  new Asiento => [
-                    nombre = "c 2"
-                    categoria = new Primera(1000)
-                ]
+			asiento2 = new Asiento => [
+				nombre = "c 2"
+				categoria = new Primera(1000)
+			]
 
-            asiento3 = new Asiento => [
-                nombre = "c 3"
-                categoria = new Primera(1000)
-            ]
+			asiento3 = new Asiento => [
+				nombre = "c 3"
+				categoria = new Primera(1000)
+			]
 
-            asientos = #[
-                asiento1,
-                asiento2,
-                asiento3
-            ]
-        ]
+			asientos = #[
+				asiento1,
+				asiento2,
+				asiento3
+			]
+		]
 
+		tramo3 = new Tramo => [
 
-        tramo3 = new Tramo => [
+			origen = "Brasil"
+			destino = "Mexico"
+			llegada = new Date(1000)
+			salida = new Date(116, 6, 16)
 
-            origen = "Brasil"
-            destino = "Mexico"
-            llegada = new Date(1000)
-            salida = new Date(116,6,16)
-            
-            asientos = #[
-                new Asiento => [
-                    nombre = "c 1"
-                    categoria = new Business(500)
-                ],
-                new Asiento => [
-                    nombre = "c 2"
-                    categoria = new Business(500)
-                ]
-            ]
-        ]
+			asientos = #[
+				new Asiento => [
+					nombre = "c 1"
+					categoria = new Business(500)
+				],
+				new Asiento => [
+					nombre = "c 2"
+					categoria = new Business(500)
+				]
+			]
+		]
 
+		vuelo1 = new VueloOfertado(#[new Tramo("Paris", "Italia"), tramo], 1000)
+		vuelo2 = new VueloOfertado(#[tramo3, new Tramo("Mexico", "España")], 2500)
+		vuelo3 = new VueloOfertado(#[new Tramo("Paris", "Italia"), new Tramo("Italia", "Grecia")], 1600)
+		vuelo4 = new VueloOfertado(#[new Tramo("Paris", "Italia"), new Tramo("Italia", "Venezuela")], 800)
+		vuelo5 = new VueloOfertado(
+			#[new Tramo("Paris", "Italia"), new Tramo("Italia", "Venezuela"), new Tramo("Venezuela", "Peru")], 8800)
 
+	}
 
-        vuelo1 = new VueloOfertado (#[new Tramo("Paris", "Italia"),tramo], 1000)
-        vuelo2 = new VueloOfertado (#[tramo3, new Tramo("Mexico", "España")] ,2500)
-        vuelo3 = new VueloOfertado (#[new Tramo("Paris", "Italia"), new Tramo("Italia", "Grecia")],1600)
-        vuelo4 = new VueloOfertado (#[new Tramo("Paris", "Italia"), new Tramo("Italia", "Venezuela")] ,800)
-        vuelo5 = new VueloOfertado (#[new Tramo("Paris", "Italia"), new Tramo("Italia", "Venezuela"), new Tramo("Venezuela", "Peru")] , 8800)
-
-    }
-	
-	
-	
-	
 	@Before
 	def void setUp() {
 		this.setUpHibernate()
@@ -196,10 +184,7 @@ class perfilCacheTesting {
 		tramo = new Tramo("Berazategui", "Mar del plata")
 		homeBase = new BaseHome
 	}
-	
-	
-	
-	
+
 	@Test
 	def void getPerfil() {
 		service.addPerfil(usuarioPepe)
@@ -209,66 +194,7 @@ class perfilCacheTesting {
 		var perfilLuis = service.getPerfil(usuarioLuis)
 		Assert.assertEquals(perfilLuis.username, "luis")
 	}
-	
-	///////////////////////////////////////////////////////////////////////////////
-	/*
-	
-	
-	
-	@Test
-	def void verPerfilCacheTest() {
-		service.guardar(perfilCacheadoPepe)
-		var pepe = service.verPerfilCache(usuarioPepe, Visibility.PUBLICO)
-		Assert.assertEquals(usuarioPepe.nombreDeUsuario, pepe.username)
-	}
-	
-	@Test
-	def void verPerfilAndDoSomething() {
-		service.guardar(perfilCacheadoPepe)
-		var pepePerfil = service.verPerfil(usuarioPepe, Visibility.PUBLICO)
-		pepePerfil.addDestiny(destinyMarDelPlata)
-		Assert.assertEquals(pepePerfil.destinations.size, 1)
-		Assert.assertEquals(pepePerfil.destinations.get(0).nombre, "Mar del plata")		
-	}
-	
-	@Test
-	def void verPerfilTest() {
-		service.guardar(perfilCacheadoPepe)
-		var pepePerfil = service.verPerfil(usuarioPepe, Visibility.PUBLICO)
-		Assert.assertEquals(pepePerfil.username, "pepe")
-	}
-	
-	@Test
-	def void borrarTest() {
-		service.guardar(perfilCacheadoPepe)
-		service.borrarPerfilCache(usuarioPepe, Visibility.PUBLICO)
-		var pepe = service.verPerfilCache(usuarioPepe, Visibility.PUBLICO)
-		Assert.assertEquals(pepe, null)
-	}
-	
-	@Test
-	def void estaPerfilTest() {
-		service.guardar(perfilCacheadoPepe)
-		var estaPepe = service.estaPerfilCache(usuarioPepe, Visibility.PUBLICO)
-		Assert.assertEquals(true, estaPepe)
-	}
-	
-	
-	*/
-	///////////////////////////////////////////////////////////////////////////////////////
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	/*parte mongo, agregando cassandra esta vez*/
-	
+
 	@Test
 	def void stalkearYoMismoTest() {
 		socialService.agregarPersona(usuarioPepe)
@@ -278,14 +204,13 @@ class perfilCacheTesting {
 		service.addVisibility(usuarioPepe, marDelPlataDestiny, visibilityPrivado)
 		service.addVisibility(usuarioPepe, marDelPlataDestiny, queFrio, visibilityPrivado)
 		val perfilPepe = service.stalkear(usuarioPepe, usuarioPepe)
-		//Al ejecutar por segunda vez la busqueda, enn vez de buscar en mongo, se ccede a la cache.
-		//Al hacer esto, aparece el mensaje confirmando que la busqueda fue desde la cache
+		// Al ejecutar por segunda vez la busqueda, enn vez de buscar en mongo, se ccede a la cache.
+		// Al hacer esto, aparece el mensaje confirmando que la busqueda fue desde la cache
 		var perfilPepe2 = service.stalkear(usuarioPepe, usuarioPepe)
-		
+
 		Assert.assertEquals(perfilPepe2.destinations.get(0).visibility.toString, "PRIVADO")
-		//Assert.assertEquals(perfilPepe2.destinations.get(0).comments.get(0).visibility.toString, "PRIVADO")
 	}
-	
+
 	@Test
 	def void stalkearNoAmigoTest() {
 		socialService.agregarPersona(usuarioPepe)
@@ -304,15 +229,14 @@ class perfilCacheTesting {
 		service.addVisibility(usuarioPepe, marDelPlataDestiny, queFrio, visibilityPublico)
 		service.addVisibility(usuarioPepe, marDelPlataDestiny, queCalor, visibilityPrivado)
 		service.addVisibility(usuarioPepe, marDelPlataDestiny, queAburrido, visibilityAmigos)
-			val perfilPepe = service.stalkear(usuarioJuanAmigoDeNadie, usuarioPepe)
-			
-			val perfilPepe2 = service.stalkear(usuarioJuanAmigoDeNadie, usuarioPepe)
+		val perfilPepe = service.stalkear(usuarioJuanAmigoDeNadie, usuarioPepe)
+
+		val perfilPepe2 = service.stalkear(usuarioJuanAmigoDeNadie, usuarioPepe)
 		Assert.assertEquals(perfilPepe.destinations.size, 1)
 		Assert.assertEquals(perfilPepe.destinations.get(0).nombre, "Mar del plata")
 		Assert.assertEquals(perfilPepe.destinations.get(0).comments.size, 3)
-		//Assert.assertEquals(perfilPepe.destinations.get(0).comments.get(0).description, "que frio")
 	}
-	
+
 	@Test
 	def void stalkearAmigoTest() {
 		socialService.agregarPersona(usuarioPepe)
@@ -334,58 +258,45 @@ class perfilCacheTesting {
 		service.addVisibility(usuarioLuis, marDelPlataDestiny, queAburrido, visibilityAmigos)
 		val perfilLuis = service.stalkear(usuarioPepe, usuarioLuis)
 		val perfilLuis2 = service.stalkear(usuarioPepe, usuarioLuis)
-		//Assert.assertEquals(perfilLuis2.username, "luis")
-		//Assert.assertEquals(perfilLuis2.destinations.size, 2)
-		//Assert.assertEquals(perfilLuis2.destinations.get(0).nombre, "Mar del plata")
-		//Assert.assertEquals(perfilLuis2.destinations.get(1).nombre, "bariloche")
-		//Assert.assertEquals(perfilLuis.destinations.get(0).comments.size, 3)
-		//Assert.assertEquals(perfilLuis.destinations.get(0).comments.get(0).description, "que frio")
-		//si comentaio tuviera visibilidad el proximo test se debe cambiar "que calor" por "que aburrido"
-		//Assert.assertEquals(perfilLuis.destinations.get(0).comments.get(1).description, "que calor")
-		//Assert.assertEquals(perfilLuis.destinations.get(0).comments.get(2).description, "que aburrido")
+		Assert.assertEquals(perfilLuis2.username, "luis")
+		Assert.assertEquals(perfilLuis2.destinations.size, 2)
+		Assert.assertEquals(perfilLuis2.destinations.get(0).nombre, "Mar del plata")
+		Assert.assertEquals(perfilLuis2.destinations.get(1).nombre, "bariloche")
+		Assert.assertEquals(perfilLuis.destinations.get(0).comments.size, 3)
+		Assert.assertEquals(perfilLuis.destinations.get(0).comments.get(0).description, "que frio")
+
 	}
-	
+
 	@Test
 	def void stalkearYoMismoYVariosAMi() {
 		socialService.agregarPersona(usuarioPepe)
 		socialService.agregarPersona(usuarioLuis)
 		service.addPerfil(usuarioPepe)
 		service.addPerfil(usuarioLuis)
-		
+
 		socialService.amigoDe(usuarioPepe, usuarioLuis)
-		
+
 		service.addDestiny(usuarioPepe, marDelPlataDestiny)
 		service.addComment(usuarioPepe, marDelPlataDestiny, queFrio)
 		service.addVisibility(usuarioPepe, marDelPlataDestiny, visibilityPrivado)
 		service.addVisibility(usuarioPepe, marDelPlataDestiny, queFrio, visibilityPrivado)
 		var perfilPepe = service.stalkear(usuarioPepe, usuarioPepe)
-		//Al ejecutar por segunda vez la busqueda, enn vez de buscar en mongo, se ccede a la cache.
-		//Al hacer esto, aparece el mensaje confirmando que la busqueda fue desde la cache
+		// Al ejecutar por segunda vez la busqueda, enn vez de buscar en mongo, se ccede a la cache.
+		// Al hacer esto, aparece el mensaje confirmando que la busqueda fue desde la cache
 		var perfilPepe2 = service.stalkear(usuarioPepe, usuarioPepe)
-		//Assert.assertEquals(perfilPepe2.destinations.get(0).visibility.toString, "PRIVADO")
-		//Assert.assertEquals(perfilPepe2.destinations.get(0).comments.get(0).visibility.toString, "PRIVADO")
-			service.addVisibility(usuarioPepe, marDelPlataDestiny, visibilityPrivado)
-		 var perfilPepeAmigo = service.stalkear(usuarioLuis, usuarioPepe)
-		 perfilPepeAmigo = service.stalkear(usuarioLuis, usuarioPepe)
-		//Assert.assertEquals(perfilPepeAmigo.destinations.size(), 0)
+		service.addVisibility(usuarioPepe, marDelPlataDestiny, visibilityPrivado)
+		var perfilPepeAmigo = service.stalkear(usuarioLuis, usuarioPepe)
+		perfilPepeAmigo = service.stalkear(usuarioLuis, usuarioPepe)
+		//Assert.assertEqualsperfilPepe.
 	}
-	
-	
-	
+
 	@After
-	def void cleanDB(){
+	def void cleanDB() {
 		home.mongoCollection.drop
 		homeBase.hqlTruncate('asiento')
-        homeBase.hqlTruncate('usuario')
-        
-       service.pcs.clean()
-	}
-	
-	
-	
-	
-	
-	
-	
-}
+		homeBase.hqlTruncate('usuario')
 
+		service.pcs.clean()
+	}
+
+}

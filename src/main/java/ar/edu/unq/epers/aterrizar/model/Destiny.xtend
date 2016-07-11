@@ -1,14 +1,12 @@
 package ar.edu.unq.epers.aterrizar.model
 
+import com.datastax.driver.mapping.annotations.Frozen
+import com.datastax.driver.mapping.annotations.UDT
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.util.ArrayList
+import java.util.List
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.mongojack.ObjectId
-import java.util.ArrayList
-import com.datastax.driver.mapping.annotations.UDT
-import com.datastax.driver.mapping.annotations.FrozenValue
-import com.datastax.driver.mapping.annotations.Frozen
-import java.util.List
-import com.datastax.driver.mapping.annotations.Field
 
 @UDT(name = "destiny", keyspace = "persistenciaPerfiles")
 @Accessors
@@ -26,7 +24,6 @@ class Destiny {
 	List<Dislike> dislikes
 	@Frozen("List< frozen<Comment>>")
 	List<Comment> comments
-	
 	
 	Visibility visibility
 	
