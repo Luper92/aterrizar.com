@@ -268,7 +268,7 @@ class perfilCacheTesting {
 	}
 
 	@Test
-	def void stalkearYoMismoYVariosAMi() {
+	def void stalkearYoMismoYotroAMi() {
 		socialService.agregarPersona(usuarioPepe)
 		socialService.agregarPersona(usuarioLuis)
 		service.addPerfil(usuarioPepe)
